@@ -11,7 +11,7 @@ This plugin will automatically complete the task during the wrap up phase. The t
 Sample demo is provided below :
 
 Any incoming task will be completed as shown below :
-![Plugin Demo](./readme-resources/plugin-autoComlete-wrapup.gif)
+![Plugin Demo](./Resources/plugin-autoComlete-wrapup.gif)
 
 ## Dependencies
 
