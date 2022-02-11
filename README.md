@@ -10,8 +10,13 @@ This plugin will automatically complete the task during the wrap up phase. The t
 
 Sample demo is provided below :
 
+The plugin will first check if the configuration for auto wrapup timer is defined or not. If the configuration
+is not found within ui_attributes then we will show a notification as below:
+![Notification](./Resources/autoComplete_config.gif)
+
 Any incoming task will be completed as shown below :
 ![Plugin Demo](https://github.com/cherylmj01/plugin-autoComplete-wrapup/blob/main/Resources/plugin-autoConplete-wrapup.gif)
+
 
 ## Dependencies
 
@@ -40,7 +45,6 @@ For example :
        "enabled": false
      }
    }
- }
 ```
 
 
@@ -58,32 +62,56 @@ Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmj
 
 1.  Clone this repo:
 
-```bash
-https://github.com/cherylmj01/plugin-autowrapup-complete.git
-```
+	```bash
+	https://github.com/cherylmj01/plugin-autowrapup-complete.git
+	```
 
-2. Go to the plugin directory
+2. Setup flex configuration as mentioned above under dependencies.
 
-```bash
-cd plugin-autoComlete-wrapup
-```
+		In order to do this you need to first get the flex configuration, you can do that by:
 
-3. Install the dependencies
+	  ```bash
+		curl -X GET 'https://flex-api.twilio.com/v1/Configuration' \
+		-u $TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN
+		```
 
-```bash
-npm install
-```
+		Copy the ui_attributes portion from the response you get and make the POST request with the updates to the ui_attributes
 
-4. Run plugin on a local environment using Twilio CLI :
+		```bash
+		curl -X POST 'https://flex-api.twilio.com/v1/Configuration' \
+		-u $TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN \
+		-H 'Content-Type: application/json' \
+		-d '{
+		    "account_sid":"Add your flex account sid here",
+		    "ui_attributes": {
+		        "Add the aautoWrapupTimer rule as shown in the section above",
+		    ...old properties continued
+		    }
+		}'
+		```
 
-```bash
-twilio flex:plugins:start
-```
+3. Go to the plugin directory
 
-5. Deploy your plugin to your Flex project using Twilio CLI:
+	```bash
+	cd plugin-autoComlete-wrapup
+	```
 
-```bash
-twilio flex:plugins:deploy --major --changelog "Notes for this version" --description "Functionality of the plugin"
-```
+4. Install the dependencies
+
+	```bash
+	npm install
+	```
+
+5. Run plugin on a local environment using Twilio CLI :
+
+	```bash
+	twilio flex:plugins:start
+	```
+
+6. Deploy your plugin to your Flex project using Twilio CLI:
+
+	```bash
+	twilio flex:plugins:deploy --major --changelog "Notes for this version" --description "Functionality of the plugin"
+	```
 
 More detailed information about deploying Flex plugins can be found here: https://www.twilio.com/docs/flex/developer/plugins/cli/deploy-and-release
