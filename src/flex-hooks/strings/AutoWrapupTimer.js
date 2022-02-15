@@ -1,3 +1,3 @@
 export default {
-  'UnconfiguredAutoWrapupTimer': 'Auto wrap up timer is not confiugred.'
+  'UnconfiguredAutoWrapupTimer': 'Auto wrap up timer is not configured.'
 }
