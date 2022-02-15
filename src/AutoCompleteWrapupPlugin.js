@@ -20,19 +20,16 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
    * @param flex { typeof import('@twilio/flex-ui') }
    * @param manager { import('@twilio/flex-ui').Manager }
    */
-  async init(flex, Manager) {
+  async init(flex, manager) {
 
-    ConfigureFlexStrings(flex, Manager);
-    RegisterFlexNotifications(flex, Manager);
+    ConfigureFlexStrings(flex, manager);
+    RegisterFlexNotifications(flex, manager);
 
-    const manager = flex.Manager.getInstance();
-    const { autoWrapupTimer } = manager.serviceConfiguration.ui_attributes;
-
-    // get the autoWrapupTimer config from ui_attributes
-    const wrapupConfig = manager.serviceConfiguration.ui_attributes.autoWrapupTimer;
+    // get the wrapupConfig config from ui_attributes
+    const wrapupConfig = manager.serviceConfiguration?.ui_attributes?.autoWrapupTimer;
 
     // if the configuration for autoWrapupTimer exits then follow the logic below
-    if (autoWrapupTimer) {
+    if (wrapupConfig) {
       manager.workerClient.on('reservationCreated', reservation => {
         // get the reservation
         const trueReservation = reservation.addListener?reservation:reservation.source;
