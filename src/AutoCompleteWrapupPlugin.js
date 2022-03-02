@@ -38,15 +38,21 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
         let reservaton_channelWrapUpConfiguration = wrapupConfig[reservation_channelName];
 
         if(existing_reservation.status === "wrapping"){
+          console.log('test',existing_reservation);
+
+          // let existingReservation_channel = existing_reservation.task.taskChannelUniqueName;
+          //
+          // let existingReservation_channelWrapUp = wrapupConfig[existingReservation_channel];
 
           let date_last_updated = existing_reservation.dateUpdated;
           let age_so_far_ms = (new Date() - new Date(date_last_updated));
-          let reservation_wrapUpTime_seconds = reservaton_channelWrapUpConfiguration.maxSeconds;
-
-          let remaining_time = (reservation_wrapUpTime_seconds*1000) - age_so_far_ms;
-          remaining_time = remaining_time <= 0 ? 1 : remaining_time;
 
           if (reservaton_channelWrapUpConfiguration && reservaton_channelWrapUpConfiguration.enabled){
+            let reservation_wrapUpTime_seconds = reservaton_channelWrapUpConfiguration.maxSeconds;
+
+            let remaining_time = (reservation_wrapUpTime_seconds*1000) - age_so_far_ms;
+            remaining_time = remaining_time <= 0 ? 1 : remaining_time;
+
             setTimeout(()=> {
               flex.Actions.invokeAction('CompleteTask', { sid: reservation.sid });
             }, remaining_time);
