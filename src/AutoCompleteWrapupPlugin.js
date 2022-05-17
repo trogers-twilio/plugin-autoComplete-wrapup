@@ -111,10 +111,8 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
         });
 
         flex.Actions.addListener("beforeLogout", payload => {
-          console.log('Hi');
           FlexState.workerTasks.forEach(reservation => {
             if (reservation.status === "wrapping") {
-              console.log('Reservation is wrapping');
               flex.Actions.invokeAction('CompleteTask', { sid: reservation.sid });
             }
           });
