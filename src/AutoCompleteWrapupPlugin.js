@@ -72,6 +72,9 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
                 timers.set(existing_reservation.sid, existing_reservation_completeTimer);
               }
             });
+
+           
+             
           }
         });
 
@@ -110,10 +113,25 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
           }
         });
 
-        flex.Actions.addListener("beforeLogout", payload => {
+        flex.Actions.addListener("beforeLogout", (payload,abortOriginal) => {
           FlexState.workerTasks.forEach(reservation => {
+            console.log('Cheryl is',reservation );
             if (reservation.status === "wrapping") {
               flex.Actions.invokeAction('CompleteTask', { sid: reservation.sid });
+            }
+            else if(reservation.status === "pending" || reservation.status === "assigned" || reservation.status === "accepted") {
+              console.log('Testing Cheryl');
+              const notification = flex.Notifications.registeredNotifications.get("HangUpCall");
+              if (reservation.channelType === 'voice' ) {
+                notification.content = notification.content.replace("{{channel}}", "voice");
+                flex.Notifications.showNotification("HangUpCall");
+              }
+              else if(reservation.channelType === 'SMS' ){
+                notification.content = notification.content.replace("{{channel}}", "SMS");
+                flex.Notifications.showNotification("HangUpCall");
+              }
+
+              abortOriginal();
             }
           });
         });
