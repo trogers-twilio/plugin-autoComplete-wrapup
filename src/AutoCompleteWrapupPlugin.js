@@ -38,7 +38,7 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
           const existing_reservation = reservation;
           let reservation_channelName = existing_reservation.taskChannelUniqueName;
           let reservation_channelWrapUpConfiguration = wrapupConfig[reservation_channelName];
-          
+
           // set a variable for timeout, this is used for clearing timeouts if the task is completed
           let existingReservation_timer;
 
@@ -73,13 +73,13 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
               }
             });
 
-           
-             
+
+
           }
         });
 
         manager.workerClient.on('reservationCreated', reservation => {
-        
+
           let trueReservation = reservation.addListener ? reservation : reservation.source;
 
           // get the channel name for the reservation
@@ -113,21 +113,23 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
           }
         });
 
-        flex.Actions.addListener("beforeLogout", (payload,abortOriginal) => {
+        flex.Actions.addListener("beforeLogout", (payload, abortOriginal) => {
           FlexState.workerTasks.forEach(reservation => {
-            console.log('Cheryl is',reservation );
+            console.log('Cheryl is', reservation);
             if (reservation.status === "wrapping") {
               flex.Actions.invokeAction('CompleteTask', { sid: reservation.sid });
             }
-            else if(reservation.status === "pending" || reservation.status === "assigned" || reservation.status === "accepted") {
+            else if (reservation.status === "pending" || reservation.status === "assigned" || reservation.status === "accepted") {
               console.log('Testing Cheryl');
-              const notification = flex.Notifications.registeredNotifications.get("HangUpCall");
-              if (reservation.channelType === 'voice' ) {
-                notification.content = notification.content.replace("{{channel}}", "voice");
+
+              if (reservation.channelType === 'voice') {
+                const notificationVoice = flex.Notifications.registeredNotifications.get("HangUpCall");
+                notificationVoice.content = notificationVoice.content.replace("{{channel}}", "voice");
                 flex.Notifications.showNotification("HangUpCall");
               }
-              else if(reservation.channelType === 'SMS' ){
-                notification.content = notification.content.replace("{{channel}}", "SMS");
+              else if (reservation.channelType === 'sms') {
+                const notificationMessage = flex.Notifications.registeredNotifications.get("HangUpCall");
+                notificationMessage.content = notificationMessage.content.replace("{{channel}}", "sms");
                 flex.Notifications.showNotification("HangUpCall");
               }
 
