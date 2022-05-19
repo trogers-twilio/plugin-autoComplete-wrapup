@@ -115,13 +115,10 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
 
         flex.Actions.addListener("beforeLogout", (payload, abortOriginal) => {
           FlexState.workerTasks.forEach(reservation => {
-            console.log('Cheryl is', reservation);
             if (reservation.status === "wrapping") {
               flex.Actions.invokeAction('CompleteTask', { sid: reservation.sid });
             }
             else if (reservation.status === "pending" || reservation.status === "assigned" || reservation.status === "accepted") {
-              console.log('Testing Cheryl');
-
               if (reservation.channelType === 'voice') {
                 const notificationVoice = flex.Notifications.registeredNotifications.get("HangUpCall");
                 notificationVoice.content = notificationVoice.content.replace("{{channel}}", "voice");
@@ -132,7 +129,6 @@ export default class AutoCompleteWrapupPlugin extends FlexPlugin {
                 notificationMessage.content = notificationMessage.content.replace("{{channel}}", "sms");
                 flex.Notifications.showNotification("HangUpCall");
               }
-
               abortOriginal();
             }
           });
